@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "investors-sample"
+version = "0.1.0"
+description = "Managing investor commitments"
+authors = ["Bren <bren.eser@androsaxon.co.uk>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = {extras = ["standard"], version = "^0.115.8"}
+sqlalchemy = "^2.0.37"
+psycopg2-binary = "^2.9.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
