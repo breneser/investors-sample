@@ -47,5 +47,5 @@ class AssetTotals(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    investor: Investor
+    asset_class: str
     total_commitment: int

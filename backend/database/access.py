@@ -78,10 +78,13 @@ class CommitmentAccessor:
         )
 
     def get_asset_totals(self, investor_id: int):
+
         return [
-            schemas.AssetTotals.model_validate(**row)
-            for row in self.session.query(
-                select(
+            schemas.AssetTotals.model_validate(
+                {"asset_class": row[0], "total_commitment": row[1]}
+            )
+            for row in (
+                self.session.query(
                     models.Commitment.asset_class,
                     func.sum(models.Commitment.amount).label("total_commitment"),
                 )
