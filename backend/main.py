@@ -20,7 +20,7 @@ def on_startup():
 def get_investors(session: Session, page: int = 1):
     # 10 items per page by default, TODO: make configurable?
     page = page if page > 0 else 1
-    investors = InvestorAccessor(session).get_offset(
+    investors = InvestorAccessor(session).get(
         offset=(page - 1) * 10,
         limit=10,
     )
@@ -31,14 +31,30 @@ def get_investors(session: Session, page: int = 1):
     return investors
 
 
-@app.get("/investors/{id}/commitments")
-def get_commitments(session: Session, page: int = 1):
+@app.get("/investors/{investor_id}/commitments")
+def get_commitments(session: Session, investor_id: int, page: int = 1):
     # 10 items per page by default, TODO: make configurable?
     page = page if page > 0 else 1
-    commitments = CommitmentAccessor(session).get_offset(
-        offset=(page - 1) * 10, limit=10
+    commitments = CommitmentAccessor(session).get_by_investor(
+        investor_id=investor_id,
+        offset=(page - 1) * 10,
+        limit=10,
     )
     if not commitments:
         raise HTTPException(status_code=404, detail="Page not found")
 
     return commitments
+
+
+# @app.get("/investors/{id}/asset_classes")
+# def get_asset_classes(
+#     session: Session,
+#     asset_class: str = "",
+# ):
+#     commitments = CommitmentAccessor(session).get_offset(
+#         offset=(page - 1) * 10, limit=10
+#     )
+#     if not commitments:
+#         raise HTTPException(status_code=404, detail="Page not found")
+#
+#     return commitments
