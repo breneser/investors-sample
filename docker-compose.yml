@@ -1,0 +1,34 @@
+services:
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-investing}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d investing -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    network_mode: host
+    ports:
+      - 5432:5432
+
+  backend: &app
+    build: ./backend
+    volumes:
+      - ./backend:/app
+    environment: &db-settings
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-investing}
+      DB_HOST: localhost
+    depends_on:
+      database:
+        condition: service_healthy
+    network_mode: host
+    ports:
+      - 8000:8000
