@@ -7,8 +7,6 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict
 
-__all__ = ["Investor", "Commitment"]
-
 
 class Investor(BaseModel):
     """
@@ -40,3 +38,14 @@ class Commitment(BaseModel):
     asset_class: str
     amount: int
     currency: str
+
+
+class AssetTotals(BaseModel):
+    """
+    Schema for asset totals for an investor
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    investor: Investor
+    total_commitment: int
